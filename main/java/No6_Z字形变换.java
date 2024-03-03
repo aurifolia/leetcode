@@ -39,7 +39,7 @@ public class No6_Z字形变换 {
      * @param args
      */
     public static void main(String[] args) {
-        Solution61 solution = new Solution61();
+        Solution62 solution = new Solution62();
         System.out.println(solution.convert("PAYPALISHIRING", 3));
     }
 }
@@ -54,19 +54,63 @@ class Solution61 {
         boolean down = true;
         int row = 0, col = 0;
         for (int i = 0; i < length; i++) {
+            matrix[row][col] = s.charAt(i);
             if (down) {
-                matrix[row % numRows][col] = s.charAt(i);
+                row++;
+                if (row % numRows == 0) {
+                    down = false;
+                    row = Math.max(numRows - 2, 0);
+                    col++;
+                }
+            }
+            else {
+                if (row % numRows == 0) {
+                    down = true;
+                    row = Math.min(1, numRows - 1);
+                    if (numRows == 1) {
+                        col++;
+                    }
+                }
+                else {
+                    col++;
+                    row = Math.max(row - 1, 0);
+                }
+            }
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] != '\0') {
+                    builder.append(matrix[i][j]);
+                }
+            }
+        }
+        return builder.toString();
+    }
+}
+
+/**
+ * 矩阵记录
+ */
+class Solution62 {
+    public String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        int length = s.length();
+        char[][] matrix = new char[numRows][s.length()];
+        int row = 0, col = 0;
+        // 周期
+        int t = numRows * 2 - 2;
+        for (int i = 0; i < length; i++) {
+            matrix[row][col] = s.charAt(i);
+            if (i % t < numRows - 1) {
                 row++;
             }
             else {
-                matrix[row % numRows][col++] = s.charAt(i);
-            }
-            if (row % numRows == 0) {
-                row -= 2;
-                if (!down) {
-                    col--;
-                }
-                down = !down;
+                row--;
+                col++;
             }
         }
         StringBuilder builder = new StringBuilder();
