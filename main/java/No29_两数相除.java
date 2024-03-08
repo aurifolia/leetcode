@@ -19,9 +19,11 @@ public class No29_两数相除 {
      */
     public static void main(String[] args) {
         Solution291 solution = new Solution291();
-        System.out.println(solution.divide(10, 3));
-        System.out.println(solution.divide(7, -3));
-        System.out.println(solution.divide(-2147483648, 2));
+//        System.out.println(solution.multiply(10, 1997));
+//        System.out.println(solution.divide(10, 3));
+//        System.out.println(solution.divide(7, -3));
+//        System.out.println(solution.divide(-2147483648, 2));
+        System.out.println(solution.divide(2147483647, 1));
     }
 }
 
@@ -47,13 +49,58 @@ class Solution291 {
         if (dividend > divisor) {
             return 0;
         }
-        int sum = 0;
-        for (int i = 0; i <= Integer.MAX_VALUE; i++) {
-            sum += divisor;
-            if (sum < dividend || sum > 0) {
-                return negative ? -i : i;
+        int left = dividend, right = -1;
+        while (left < right) {
+            int mid = left + ((right - left) >> 1);
+            int multiply = multiply(divisor, -mid);
+            if (multiply > 0 || multiply < dividend) {
+                left = mid + 1;
+            }
+            else {
+                if (mid == right) {
+                    return negative ? mid : -mid;
+                }
+                right = mid;
             }
         }
-        return 0;
+        return negative ? right : -right;
+    }
+
+    public int multiply(int a, int b) {
+        int sum = a, power = 2;
+        List<Integer> sums = new ArrayList<>();
+        List<Integer> powers = new ArrayList<>();
+        while (power > 0 && power <= b) {
+            sum += sum;
+            if (sum >= 0) {
+                return 1;
+            }
+            sums.add(sum);
+            powers.add(power);
+            power <<= 1;
+        }
+        power >>>= 1;
+        b -= power;
+        if (b == 0) {
+            return sum;
+        }
+        for (int i = sums.size() - 1; i >= 0; i--) {
+            Integer currentPower = powers.get(i);
+            if (currentPower <= b) {
+                sum += sums.get(i);
+                if (sum >= 0) {
+                    return 1;
+                }
+                b -= currentPower;
+            }
+        }
+        while (b > 0) {
+            sum += a;
+            if (sum >= 0) {
+                return 1;
+            }
+            b--;
+        }
+        return sum;
     }
 }
