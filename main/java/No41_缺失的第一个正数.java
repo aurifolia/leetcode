@@ -35,4 +35,3 @@ class Solution411 {
         return length + 1;
     }
 }
-
