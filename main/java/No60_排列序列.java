@@ -59,6 +59,7 @@ class Solution602 {
         int[] factor = new int[n];
         factor[0] = 1;
         for (int i = 1; i < n; i++) {
+
             factor[i] = factor[i - 1] * i;
         }
         k--;
