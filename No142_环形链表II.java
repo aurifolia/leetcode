@@ -15,7 +15,7 @@ public class No142_环形链表II {
 }
 
 class Solution142 {
-    public ListNode detectCycle(ListNode head) {
+    public ListNode detectCycle1(ListNode head) {
         Set<ListNode> set = new HashSet<>();
         ListNode node = head;
         while (node != null) {
@@ -26,5 +26,26 @@ class Solution142 {
             node = node.next;
         }
         return null;
+    }
+
+    public ListNode detectCycle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                break;
+            }
+        }
+        if (fast == null || fast.next == null) {
+            return null;
+        }
+        ListNode node = head;
+        while (node != null && node != fast) {
+            node = node.next;
+            fast = fast.next;
+        }
+        return node;
     }
 }
