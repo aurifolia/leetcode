@@ -32,8 +32,8 @@ class Solution33 {
             if (nums[mid] == target) {
                 return mid;
             }
-            else if (nums[mid] < target) {
-                if (nums[right] > target) {
+            else if (nums[mid] < nums[right]) {
+                if (nums[mid] < target && nums[right] >= target) {
                     left = mid + 1;
                 }
                 else {
@@ -41,14 +41,11 @@ class Solution33 {
                 }
             }
             else {
-                if (nums[left] < target) {
+                if (nums[left] <= target && nums[mid] > target) {
                     right = mid - 1;
                 }
-                else if (nums[left] > target) {
-                    left = mid + 1;
-                }
                 else {
-                    return left;
+                    left = mid + 1;
                 }
             }
         }
